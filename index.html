@@ -7,6 +7,33 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* 背景动画 */
+        @keyframes backgroundShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        /* 漂浮的爱心和星星 */
+        @keyframes floatHeart {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+        .floating-heart {
+            position: fixed;
+            color: rgba(255, 182, 193, 0.6);
+            animation: floatHeart 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+        .star {
+            position: fixed;
+            color: rgba(255, 223, 186, 0.6);
+            animation: twinkle 2s ease-in-out infinite;
+            pointer-events: none;
+        }
         @keyframes float {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-20px); }
@@ -43,12 +70,13 @@
             }
         }
         .confetti {
-            position: absolute;
+            position: fixed;
             width: 8px;
             height: 8px;
             background-color: #f0f;
             animation: confetti-fall 3s ease-in infinite;
             will-change: transform;
+            pointer-events: none;
         }
         @keyframes confetti-fall {
             0% { transform: translateY(-100vh) rotate(0deg); }
@@ -56,7 +84,7 @@
         }
     </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-pink-100 to-purple-200 flex flex-col items-center justify-center p-4 sm:p-6 md:p-8">
+<body class="min-h-screen bg-gradient-to-br from-pink-50 via-purple-100 to-pink-100 animate-[backgroundShift_15s_ease-in-out_infinite] flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 overflow-hidden" style="background-size: 200% 200%;">
     <div id="confetti-container" class="fixed inset-0 pointer-events-none"></div>
     
     <div class="text-center w-full max-w-2xl mx-auto px-4 sm:px-6">
@@ -66,10 +94,10 @@
             <i class="fas fa-pizza-slice text-5xl sm:text-6xl md:text-8xl text-yellow-500"></i>
         </div>
         
-        <h1 class="birthday-text text-3xl sm:text-4xl md:text-6xl font-bold mb-4 sm:mb-6">王晓靖小朋友520快乐！</h1>
+        <h1 class="birthday-text text-3xl sm:text-4xl md:text-6xl font-bold mb-4 sm:mb-6">祝抽象,可爱,爱好吃喝玩乐的王晓靖小朋友520节日快乐,天天开心!</h1>
         
         <p class="text-lg sm:text-xl md:text-2xl text-gray-700 mb-6 sm:mb-8 leading-relaxed">
-            亲爱的吃货小可爱，
+            亲爱的吃货，小王同学，
             <br>愿你的每一天都像美食一样甜蜜，
             <br>像冰淇淋一样清爽，
             <br>像披萨一样充满惊喜！
@@ -87,6 +115,29 @@
     </div>
 
     <script>
+        // 创建漂浮的爱心和星星
+        function createFloatingElements() {
+            const container = document.body;
+            const numElements = 12;
+            const icons = [
+                { class: 'fas fa-heart floating-heart', sizes: ['text-sm', 'text-base', 'text-lg'] },
+                { class: 'fas fa-star star', sizes: ['text-xs', 'text-sm', 'text-base'] }
+            ];
+
+            for (let i = 0; i < numElements; i++) {
+                const icon = icons[Math.floor(Math.random() * icons.length)];
+                const element = document.createElement('i');
+                element.className = `${icon.class} ${icon.sizes[Math.floor(Math.random() * icon.sizes.length)]}`;
+                element.style.left = `${Math.random() * 100}%`;
+                element.style.top = `${Math.random() * 100}%`;
+                element.style.animationDelay = `${Math.random() * 2}s`;
+                container.appendChild(element);
+            }
+        }
+
+        // 初始化漂浮元素
+        createFloatingElements();
+
         function createConfetti() {
             const colors = ['#ff6b6b', '#ffd93d', '#6c5ce7', '#a8e6cf', '#ff9ff3'];
             const container = document.getElementById('confetti-container');
@@ -105,7 +156,7 @@
 
         document.getElementById('wishBtn').addEventListener('click', () => {
             createConfetti();
-            alert('愿你永远像现在这样可爱，开心每一天！❤️\n\n——来自一个特别喜欢你的人');
+            alert('愿你永远像现在这样可爱，开心每一天');
         });
 
         // 初始化页面时播放一次彩带效果
