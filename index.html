@@ -71,16 +71,28 @@
         }
         .confetti {
             position: fixed;
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
             background-color: #f0f;
-            animation: confetti-fall 3s ease-in infinite;
+            animation: confetti-fall 4s ease-out infinite;
             will-change: transform;
             pointer-events: none;
+            opacity: 0.8;
+            border-radius: 50%;
         }
         @keyframes confetti-fall {
-            0% { transform: translateY(-100vh) rotate(0deg); }
-            100% { transform: translateY(100vh) rotate(360deg); }
+            0% { 
+                transform: translateY(-100vh) translateX(0) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(0) translateX(100px) rotate(180deg) scale(1.5);
+                opacity: 0.8;
+            }
+            100% { 
+                transform: translateY(100vh) translateX(-100px) rotate(360deg) scale(0.5);
+                opacity: 0;
+            }
         }
     </style>
 </head>
@@ -149,18 +161,23 @@
         createFloatingElements();
 
         function createConfetti() {
-            const colors = ['#ff6b6b', '#ffd93d', '#6c5ce7', '#a8e6cf', '#ff9ff3'];
+            const colors = ['#ff6b6b', '#ffd93d', '#6c5ce7', '#a8e6cf', '#ff9ff3', '#ff85a1', '#fbb1bd', '#b5179e'];
             const container = document.getElementById('confetti-container');
+            const shapes = ['50%', '0%'];
             
-            for (let i = 0; i < 50; i++) {
+            for (let i = 0; i < 80; i++) {
                 const confetti = document.createElement('div');
                 confetti.className = 'confetti';
                 confetti.style.left = Math.random() * 100 + 'vw';
                 confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.animationDelay = Math.random() * 3 + 's';
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                confetti.style.width = Math.random() * 8 + 8 + 'px';
+                confetti.style.height = confetti.style.width;
+                confetti.style.borderRadius = shapes[Math.floor(Math.random() * shapes.length)];
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
                 container.appendChild(confetti);
                 
-                setTimeout(() => confetti.remove(), 3000);
+                setTimeout(() => confetti.remove(), 4000);
             }
         }
 
