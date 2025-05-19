@@ -71,41 +71,16 @@
         }
         .confetti {
             position: fixed;
-            pointer-events: none;
-            will-change: transform;
-        }
-        .confetti-square {
             width: 8px;
             height: 8px;
+            background-color: #f0f;
+            animation: confetti-fall 3s ease-in infinite;
+            will-change: transform;
+            pointer-events: none;
         }
-        .confetti-circle {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-        }
-        .confetti-triangle {
-            width: 0;
-            height: 0;
-            border-left: 6px solid transparent;
-            border-right: 6px solid transparent;
-            border-bottom: 12px solid;
-        }
-        @keyframes confetti-fall-and-fade {
-            0% { 
-                transform: translateY(-100vh) rotate(0deg) scale(1);
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% { 
-                transform: translateY(100vh) rotate(720deg) scale(0.5);
-                opacity: 0;
-            }
-        }
-        @keyframes confetti-sway {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(100px); }
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100vh) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(360deg); }
         }
     </style>
 </head>
@@ -174,35 +149,18 @@
         createFloatingElements();
 
         function createConfetti() {
-            const colors = ['#ff6b6b', '#ffd93d', '#6c5ce7', '#a8e6cf', '#ff9ff3', '#ff99cc', '#99ff99'];
+            const colors = ['#ff6b6b', '#ffd93d', '#6c5ce7', '#a8e6cf', '#ff9ff3'];
             const container = document.getElementById('confetti-container');
-            const shapes = ['square', 'circle', 'triangle'];
             
-            for (let i = 0; i < 100; i++) {
+            for (let i = 0; i < 50; i++) {
                 const confetti = document.createElement('div');
-                const shape = shapes[Math.floor(Math.random() * shapes.length)];
-                const color = colors[Math.floor(Math.random() * colors.length)];
-                
-                confetti.className = `confetti confetti-${shape}`;
+                confetti.className = 'confetti';
                 confetti.style.left = Math.random() * 100 + 'vw';
-                
-                if (shape === 'triangle') {
-                    confetti.style.borderBottomColor = color;
-                } else {
-                    confetti.style.backgroundColor = color;
-                }
-                
-                const fallDuration = 2 + Math.random() * 2;
-                const swayDuration = 3 + Math.random() * 2;
-                const fallDelay = Math.random() * 2;
-                
-                confetti.style.animation = `
-                    confetti-fall-and-fade ${fallDuration}s ease-in ${fallDelay}s forwards,
-                    confetti-sway ${swayDuration}s ease-in-out ${fallDelay}s infinite
-                `;
-                
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 3 + 's';
                 container.appendChild(confetti);
-                setTimeout(() => confetti.remove(), (fallDuration + fallDelay) * 1000);
+                
+                setTimeout(() => confetti.remove(), 3000);
             }
         }
 
